@@ -33,10 +33,8 @@ namespace config {
   constexpr size_t kBlockCreationUnixTime{48151623};
   constexpr size_t kParentTipsetWeight{111307};
   const auto kParentTipset{"010001020005"_cid};
-  const std::vector<fc::CID> kParentTipsetBlocks{
-      "010001020006"_cid,
-      "010001020007"_cid};
-  const fc::common::Buffer kPostProof{"a0b0cc"_unhex};
+  const std::vector<fc::CID> kParentTipsetBlocks{"010001020006"_cid,
+                                                 "010001020007"_cid};
   const auto kPostRand{
       "e9cecfc7c4c120d4c1cb20c8cfdec5d4d3d120dac1c2d9d4d820cf20d1ddc9cbc520d320"
       "cdc9cbd2cfd3c8c5cdc1cdc920c920cec520cfd4cbd2d9d7c1d4d820d7cfccdbc5c2ced9"
@@ -80,9 +78,14 @@ class BlockProducerTest : public testing::Test {
   using BlockProducer = fc::blockchain::production::BlockProducer;
   using BlockProducerImpl = fc::blockchain::production::BlockProducerImpl;
 
-  EPostProof e_post_proof_{.proof = config::kPostProof,
-                           .post_rand = config::kPostRand,
-                           .candidates = {}};
+  EPostProof e_post_proof_{
+      .proofs = {fc::primitives::sector::PoStProof{
+          fc::primitives::sector::RegisteredProof::StackedDRG2KiBSeal,
+          "F00D"_unhex,
+      }},
+      .post_rand = config::kPostRand,
+      .candidates = {},
+  };
 
   Tipset getParentTipset() const;
 
